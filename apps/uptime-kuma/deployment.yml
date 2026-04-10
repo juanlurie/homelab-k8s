@@ -12,17 +12,18 @@ spec:
     metadata:
       labels:
         app: uptime-kuma
-    spec:                                   
-      containers:                       
-        - name: uptime-kuma
-          image: louislam/uptime-kuma:2                                                                                     
-          ports:
-            - containerPort: 3001                                                                                           
+    spec:
+      nodeSelector:                         
+        kubernetes.io/hostname: services-03
+      containers:
+        - name: uptime-kuma                                                                                                 
+          image: louislam/uptime-kuma:2
+          ports:                                                                                                            
+            - containerPort: 3001       
           volumeMounts:
-            - name: data                    
-              mountPath: /app/data      
-      volumes:
-        - name: data                                                                                                        
-          hostPath:
-            path: /opt/uptime-kuma                                                                                          
-            type: DirectoryOrCreate
+            - name: data                                                                                                    
+              mountPath: /app/data
+      volumes:                                                                                                              
+        - name: data
+          persistentVolumeClaim:
+            claimName: uptime-kuma-data
